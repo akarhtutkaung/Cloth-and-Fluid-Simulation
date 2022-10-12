@@ -75,6 +75,7 @@ void draw() {
   noLights();
 
   camera.Update(1.0/frameRate);
+  //water.Update(1.0/frameRate);
   drawCubes();
   drawGround();
   drawWater();
