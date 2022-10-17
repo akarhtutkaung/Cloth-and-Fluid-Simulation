@@ -23,6 +23,8 @@ class Camera
   PVector positiveMovement;
   PVector negativeTurn;
   PVector positiveTurn;
+  PVector forwardDir;
+  PVector rightDir;
   boolean shiftPressed;
 
   // for mouse movement
@@ -64,9 +66,9 @@ class Camera
     // except that their theta and phi are named opposite
     float t = theta + PI / 2;
     float p = phi + PI / 2;
-    PVector forwardDir = new PVector( sin( p ) * cos( t ),   cos( p ),   -sin( p ) * sin ( t ) );
+    forwardDir = new PVector( sin( p ) * cos( t ),   cos( p ),   -sin( p ) * sin ( t ) );
     PVector upDir      = new PVector( sin( phi ) * cos( t ), cos( phi ), -sin( t ) * sin( phi ) );
-    PVector rightDir   = new PVector( cos( theta ), 0, -sin( theta ) );
+    rightDir   = new PVector( cos( theta ), 0, -sin( theta ) );
     PVector velocity   = new PVector( negativeMovement.x + positiveMovement.x, negativeMovement.y + positiveMovement.y, negativeMovement.z + positiveMovement.z );
     position.add( PVector.mult( forwardDir, moveSpeed * velocity.z * dt ) );
     position.add( PVector.mult( upDir,      moveSpeed * velocity.y * dt ) );
@@ -138,5 +140,13 @@ class Camera
     if(dir.y > 0) negativeTurn.y = -1;
     
     pmouse = new Vector2(mouseX, mouseY);
+  }
+
+  PVector getForwardDirection(){
+    return forwardDir;
+  }
+
+  PVector getRightDirection(){
+    return rightDir;
   }
 };
