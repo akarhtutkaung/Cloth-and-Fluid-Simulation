@@ -1,5 +1,6 @@
 Camera camera;
 Fluid water;
+Cloth cloth;
 
 //Create Window
 String windowTitle = "Project2";
@@ -9,7 +10,8 @@ void setup()
   fullScreen(P3D);
   surface.setTitle(windowTitle);
   camera = new Camera();
-  //water = new Fluid();
+  // water = new Fluid();
+  cloth = new Cloth();
 }
 
 void keyPressed()
@@ -70,13 +72,22 @@ void drawWater() {
 
 }
 
+void drawCloth() {
+  cloth.Draw();
+}
+
 void draw() {
   background(255);
   noLights();
 
   camera.Update(1.0/frameRate);
   //water.Update(1.0/frameRate);
-  drawCubes();
+
+  for (int i=0; i < 100; i++){
+    cloth.Update(1/(100*frameRate));
+  }
+  // drawCubes();
   drawGround();
   drawWater();
+  drawCloth();
 }
