@@ -11,8 +11,6 @@ class Cloth
   float k = 500;
   float kv = 100;
 
-  // float obstacle.radius = 50;
-
   int yOffset = 3;
   int xOffset = 3;
   int zOffset = 3;
@@ -167,8 +165,6 @@ class Cloth
     }
   }
 
-  boolean leftPressed, rightPressed, upPressed, downPressed, shiftPressed;
-
   //Draw the scene: one sphere per mass, one line connecting each pair
   void Draw() {
     fill(0,0,0);
@@ -180,7 +176,6 @@ class Cloth
           line(nodes[i+1][j].position.x, nodes[i+1][j].position.y, nodes[i+1][j].position.z, nodes[i+1][j+1].position.x, nodes[i+1][j+1].position.y, nodes[i+1][j+1].position.z);
         }
         translate(nodes[i+1][j].position.x, nodes[i+1][j].position.y, nodes[i+1][j].position.z);
-        // sphere(radius);
         popMatrix();
       }
     } 
