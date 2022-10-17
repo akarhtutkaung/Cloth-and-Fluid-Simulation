@@ -77,7 +77,9 @@ void drawObstacle() {
 }
 
 void addCloth() {
-  clothes.add(new Cloth(10, 4, new Vector3(100,-50,-200), ground, 0));
+  Cloth cloth = new Cloth(10, 4, new Vector3(100,-50,-200), ground, 0);
+  cloth.addObstacle(obstacle);
+  clothes.add(cloth);
 }
 
 void draw() {
