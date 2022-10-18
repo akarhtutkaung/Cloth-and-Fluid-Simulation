@@ -11,7 +11,7 @@ void setup()
   fullScreen(P3D);
   surface.setTitle(windowTitle);
   camera = new Camera();
-  // water = new Fluid();
+  water = new Fluid(-50, 50, -350, -400, ground);
   float rad = 25;
   obstacle = new ObstacleSphere(new Vector3(100, ground - rad, -200), rad);
   Cloth cloth = new Cloth(10, 50, new Vector3(-100,-40,-200), ground);
@@ -48,7 +48,7 @@ void drawGround() {
 }
 
 void drawWater() {
-
+  water.Draw();
 }
 
 void drawCloth() {
@@ -70,16 +70,19 @@ void draw() {
   lights();
 
   camera.Update(1.0/frameRate);
-  //water.Update(1.0/frameRate);
+  for(int i=0; i<10; i++){
+    water.Update(1.0/frameRate);
+  drawWater();
+  }
 
   for(Cloth cloth : clothes){
     for (int i=0; i < 100; i++){
       cloth.Update(1/(100*frameRate));
     }
   }
+  
   drawObstacle();
   drawGround();
-  drawWater();
   drawCloth();
 
   obstacle.Update(camera.getForwardDirection(), camera.getRightDirection());
