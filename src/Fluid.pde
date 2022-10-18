@@ -10,6 +10,7 @@ class Fluid
   float z;
   final float dx = 0.5f; // length of x-axis cell
   final float dz = 10.0f; // length of z-axis cell
+  final float dy = 3.0f; // length of y-axis cell
   float lastXSize;
   float lastZSize;
   int nx; // number of x-axis cells
@@ -22,6 +23,7 @@ class Fluid
   float damp = 0.9f;
   float scale = 10.0f;
 
+  ArrayList<ObstacleSphere> obstacles = new ArrayList<ObstacleSphere>();
 
   // Fluid(float leftX, float rightX, float bottomY, float topY, float frontZ, float backZ, float ground) {
   Fluid(float leftX, float rightX, float frontZ, float backZ, float ground) {
@@ -64,7 +66,8 @@ class Fluid
         // }
         
         Vector3 position = new Vector3(xPos, ground, zPos);
-        Vector3 size = new Vector3(dx, 2*i/nx + 1, dz);
+        // Vector3 size = new Vector3(dx, 2*i/nx + 1, dz);
+        Vector3 size = new Vector3(dx, dy, dz);
 
         if(i == nx) size.x = lastXSize;
         // if(j == nz) size.z = lastZSize;
@@ -75,6 +78,21 @@ class Fluid
   }
 
   void Update(float dt){
+
+    // Check if obstacle collide with fluid
+    for(ObstacleSphere obstacle : obstacles){
+      for(int i = 0; i < nx; i++){
+        if(obstacle.hit == false){
+          if(obstacle.radius + obstacle.position.y > ground - ((rectangles[rectangles.length/2].size.y*scale/2))){
+            rectangles[rectangles.length/2 + 1].size.y = 1;
+            rectangles[rectangles.length/2 - 1].size.y = 1;
+            rectangles[rectangles.length/2].size.y = 1;
+            obstacle.hit = true;
+          }
+        }
+      }
+    }
+
     // Compute midpoint heights and momentums
     for(int i = 0; i < nx-1; i++){
       // for(int j = 0; j < nz; j++){
@@ -135,6 +153,7 @@ class Fluid
   }
 
   void Draw(){
+    // Draw fluid
     for(int i = 0; i < nx; i++){
       // for(int j = 0; j < nz; j++){
         pushMatrix();
@@ -142,9 +161,13 @@ class Fluid
         RGB rgb = rectangle.rgb;
         fill(rgb.r, rgb.g, rgb.b);
         translate(rectangle.position.x, rectangle.position.y, rectangle.position.z);
-        box(rectangle.size.x * scale, rectangle.size.y * (scale*2), rectangle.size.z * scale);
+        box(rectangle.size.x * scale, rectangle.size.y * scale, rectangle.size.z * scale);
         popMatrix();
       // }
     }
+  }
+
+  void addObstacle(ObstacleSphere obstacle){
+    obstacles.add(obstacle);
   }
 }

@@ -1,19 +1,27 @@
 Camera camera;
 Fluid water;
-ArrayList<Cloth> clothes = new ArrayList<Cloth>();;
+ArrayList<Cloth> clothes = new ArrayList<Cloth>();
 
 //Create Window
 String windowTitle = "Project2";
 float ground = 60;
-ObstacleSphere obstacle;
+ArrayList<ObstacleSphere> obstacles = new ArrayList<ObstacleSphere>();
+
+// Fluid bounding box
+float leftX = -50;
+float rightX = 50;
+float backZ = -350; 
+float frontZ = -400;
+
 void setup()
 {
   fullScreen(P3D);
   surface.setTitle(windowTitle);
   camera = new Camera();
-  water = new Fluid(-50, 50, -350, -400, ground);
+  water = new Fluid(leftX, rightX, backZ, frontZ, ground);
   float rad = 25;
-  obstacle = new ObstacleSphere(new Vector3(100, ground - rad, -200), rad);
+  ObstacleSphere obstacle = new MovableObstacleSphere(new Vector3(100, ground - rad, -200), rad);
+  obstacles.add(obstacle);
   Cloth cloth = new Cloth(10, 50, new Vector3(-100,-40,-200), ground);
   cloth.addObstacle(obstacle);
   clothes.add(cloth);
@@ -22,7 +30,9 @@ void setup()
 void keyPressed()
 {
   camera.HandleKeyPressed();
-  obstacle.HandleKeyPressed();
+  for(ObstacleSphere obstacle : obstacles){
+    obstacle.HandleKeyPressed();
+  }
   for(Cloth cloth : clothes){
     cloth.HandleKeyPressed();
   }
@@ -31,12 +41,26 @@ void keyPressed()
 void keyReleased()
 {
   camera.HandleKeyReleased();
-  obstacle.HandleKeyReleased();
+  for(ObstacleSphere obstacle : obstacles){
+    obstacle.HandleKeyReleased();
+  }
 }
 
 void mouseMoved() 
 {
   camera.HandleMouseMoved();
+}
+
+void mousePressed()
+{
+  createObstacleForFluid();
+}
+
+void createObstacleForFluid(){
+  Vector3 position = new Vector3(leftX + (rightX - leftX)/2, -ground, backZ - (frontZ - backZ)/2);
+  ObstacleSphere obstacle = new NonmovableObstacleSphere(position, 5, ground);
+  obstacles.add(obstacle);
+  water.addObstacle(obstacle);
 }
 
 void drawGround() {
@@ -58,11 +82,13 @@ void drawCloth() {
 }
 
 void drawObstacle() {
-  pushMatrix();
-  fill(255,255,255);
-  translate(obstacle.position.x, obstacle.position.y, obstacle.position.z);
-  sphere(obstacle.radius);
-  popMatrix();
+  for(ObstacleSphere obstacle : obstacles){
+    pushMatrix();
+    fill(255,255,255);
+    translate(obstacle.position.x, obstacle.position.y, obstacle.position.z);
+    sphere(obstacle.radius);
+    popMatrix();
+  }
 }
 
 void draw() {
@@ -72,7 +98,7 @@ void draw() {
   camera.Update(1.0/frameRate);
   for(int i=0; i<10; i++){
     water.Update(1.0/frameRate);
-  drawWater();
+    drawWater();
   }
 
   for(Cloth cloth : clothes){
@@ -85,5 +111,7 @@ void draw() {
   drawGround();
   drawCloth();
 
-  obstacle.Update(camera.getForwardDirection(), camera.getRightDirection());
+  for(ObstacleSphere obstacle : obstacles){
+    obstacle.Update(camera.getForwardDirection(), camera.getRightDirection(), frameRate);
+  }
 }

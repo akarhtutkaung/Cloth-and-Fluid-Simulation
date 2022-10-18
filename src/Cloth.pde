@@ -20,6 +20,7 @@ class Cloth
   float sizeBetweenX = 1;
 
   PImage img;
+  // MovableObstacleSphere obstacle;
   ObstacleSphere obstacle;
 
   //Initial positions and velocities of masses
