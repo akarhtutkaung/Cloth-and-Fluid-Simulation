@@ -8,14 +8,13 @@ float ground = 60;
 ObstacleSphere obstacle;
 void setup()
 {
-  // size(600, 600, P3D);
   fullScreen(P3D);
   surface.setTitle(windowTitle);
   camera = new Camera();
   // water = new Fluid();
   float rad = 25;
   obstacle = new ObstacleSphere(new Vector3(100, ground - rad, -200), rad);
-  Cloth cloth = new Cloth(10, 4, new Vector3(-100,-50,-200), ground, 1);
+  Cloth cloth = new Cloth(10, 50, new Vector3(-100,-40,-200), ground);
   cloth.addObstacle(obstacle);
   clothes.add(cloth);
 }
@@ -24,6 +23,9 @@ void keyPressed()
 {
   camera.HandleKeyPressed();
   obstacle.HandleKeyPressed();
+  for(Cloth cloth : clothes){
+    cloth.HandleKeyPressed();
+  }
 }
 
 void keyReleased()
@@ -37,24 +39,11 @@ void mouseMoved()
   camera.HandleMouseMoved();
 }
 
-void mousePressed() 
-{
-  addCloth();
-}
-
 void drawGround() {
   pushMatrix();
   fill(128,128,128);
   translate( 0, ground, 0 );
   box(1000,1,1000);
-  popMatrix();
-}
-
-void drawFallClothLocation() {
-  pushMatrix();
-  fill(139,69,19);
-  translate( 100, -50, -200);
-  box(20,1,20);
   popMatrix();
 }
 
@@ -76,12 +65,6 @@ void drawObstacle() {
   popMatrix();
 }
 
-void addCloth() {
-  Cloth cloth = new Cloth(10, 4, new Vector3(100,-50,-200), ground, 0);
-  cloth.addObstacle(obstacle);
-  clothes.add(cloth);
-}
-
 void draw() {
   background(255);  
   lights();
@@ -94,7 +77,6 @@ void draw() {
       cloth.Update(1/(100*frameRate));
     }
   }
-  drawFallClothLocation();
   drawObstacle();
   drawGround();
   drawWater();

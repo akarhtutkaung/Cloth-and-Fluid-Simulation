@@ -11,11 +11,13 @@ class Cloth
   float k = 500;
   float kv = 100;
 
-  int yOffset = 3;
-  int xOffset = 3;
-  int zOffset = 3;
+  float yOffset;
+  float xOffset;
+  float zOffset;
 
-  int fallDown;
+  boolean debug = false;
+
+  float sizeBetweenX = 1;
 
   PImage img;
   ObstacleSphere obstacle;
@@ -24,6 +26,9 @@ class Cloth
   int maxColumnNodes;
   int maxRowNodes;
 
+  float width = 20.0f;
+  float height = 20.0f;
+
   Node nodes[][];
 
   Cloth() {
@@ -31,21 +36,16 @@ class Cloth
     this.maxRowNodes = 10;
     this.ground = 0;
     this.stringTop = new Vector3(-100,-50,-200);
-    this.fallDown = 1; // not falling down
     img = loadImage("Assets/carpet.png");
     initPos();
     initUV();
   }
 
-  // fallDown: 
-  // 0 = fall down
-  // 1 = does not fall down
-  Cloth(int maxRowNodes, int maxColumnNodes, Vector3 stringTop, float ground, int fallDown) {
+  Cloth(int maxRowNodes, int maxColumnNodes, Vector3 stringTop, float ground) {
     this.maxRowNodes = maxRowNodes;
     this.maxColumnNodes = maxColumnNodes;
     this.ground = ground;
     this.stringTop = stringTop;
-    this.fallDown = fallDown;
     img = loadImage("Assets/carpet.png");
     initPos();
     initUV();
@@ -61,7 +61,10 @@ class Cloth
 
   void initPos(){
     nodes = new Node[maxRowNodes][maxColumnNodes];
-      
+    
+    xOffset = width/maxColumnNodes;
+    zOffset = height/maxRowNodes;
+
     for (int row = 0; row < maxRowNodes; row++){
       float xOffsetTmp = 0;
       for(int col = 0; col < maxColumnNodes; col++){
@@ -70,7 +73,7 @@ class Cloth
         float z = stringTop.z - zOffset * row;
         Vector3 pos = new Vector3(x, y, z);
         nodes[row][col] = new Node(pos);
-        xOffsetTmp += 25;
+        xOffsetTmp += sizeBetweenX;
       }
     }
   }
@@ -116,7 +119,7 @@ class Cloth
     for(int i = 0; i < maxRowNodes-1; i++){
       for(int j = 0; j < maxColumnNodes-1; j++){
         Vector3 diffh = nodes[i][j+1].position.minus(nodes[i][j].position);
-        float stringFh = -30*(diffh.length() - 25);
+        float stringFh = -30*(diffh.length() - sizeBetweenX);
 
         Vector3 stringDirh = diffh.normalized();
         float projVboth = dot(nodes[i][j].velocityH, stringDirh);
@@ -130,7 +133,7 @@ class Cloth
     }
 
     //Eulerian integration
-    for(int i = fallDown; i < maxRowNodes; i++){ // change here to make it fall
+    for(int i = 1; i < maxRowNodes; i++){
       for(int j = 0; j < maxColumnNodes; j++){
         nodes[i][j].addToVelocity(nodes[i][j].acceleration.times(dt));
         nodes[i][j].addToPosition(nodes[i][j].velocity.times(dt));
@@ -171,6 +174,10 @@ class Cloth
     for(int i = 0; i < maxRowNodes-1; i++){
       for(int j = 0; j < maxColumnNodes-1; j++){
         pushMatrix();
+        if(debug == true){
+          stroke(255);
+          strokeWeight(2);
+        }
         line(nodes[i][j].position.x, nodes[i][j].position.y, nodes[i][j].position.z, nodes[i+1][j].position.x, nodes[i+1][j].position.y, nodes[i+1][j].position.z);
         if(j != maxColumnNodes-2){
           line(nodes[i+1][j].position.x, nodes[i+1][j].position.y, nodes[i+1][j].position.z, nodes[i+1][j+1].position.x, nodes[i+1][j+1].position.y, nodes[i+1][j+1].position.z);
@@ -193,5 +200,9 @@ class Cloth
       }
       endShape();
     }
+  }
+
+  void HandleKeyPressed(){
+    if ( key == '\\' ) debug = !debug;
   }
 }
