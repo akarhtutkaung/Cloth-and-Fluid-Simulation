@@ -22,7 +22,8 @@ void setup()
   float rad = 25;
   ObstacleSphere obstacle = new MovableObstacleSphere(new Vector3(100, ground - rad, -200), rad);
   obstacles.add(obstacle);
-  Cloth cloth = new Cloth(10, 50, new Vector3(-100,-40,-200), ground);
+  //Cloth cloth = new Cloth(10, 50, new Vector3(-100,-40,-200), ground);
+  Cloth cloth = new Cloth(17, 100, new Vector3(-100,-40,-200), ground);
   cloth.addObstacle(obstacle);
   clothes.add(cloth);
 }

@@ -7,9 +7,9 @@ class Cloth
   float radius = 1;
   Vector3 stringTop;
   float restLen = 5;
-  float mass = 1;
-  float k = 500;
-  float kv = 100;
+  float mass = 0.1;
+  float k = 800;
+  float kv = 130;
 
   float yOffset;
   float xOffset;
@@ -65,13 +65,12 @@ class Cloth
     
     xOffset = width/maxColumnNodes;
     zOffset = height/maxRowNodes;
-
     for (int row = 0; row < maxRowNodes; row++){
       float xOffsetTmp = 0;
       for(int col = 0; col < maxColumnNodes; col++){
         float x = stringTop.x + xOffsetTmp + xOffset * row;
         float y = stringTop.y;
-        float z = stringTop.z - zOffset * row;
+        float z = stringTop.z + zOffset * row;
         Vector3 pos = new Vector3(x, y, z);
         nodes[row][col] = new Node(pos);
         xOffsetTmp += sizeBetweenX;
