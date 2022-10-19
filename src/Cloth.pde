@@ -28,7 +28,7 @@ class Cloth
   int maxRowNodes;
 
   float width = 20.0f;
-  float height = 20.0f;
+  float height = 15.0f;
 
   Node nodes[][];
 

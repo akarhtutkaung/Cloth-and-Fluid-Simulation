@@ -58,8 +58,8 @@ void mousePressed()
 }
 
 void createObstacleForFluid(){
-  Vector3 position = new Vector3(leftX + (rightX - leftX)/2, -ground, backZ - (frontZ - backZ)/2);
-  ObstacleSphere obstacle = new NonmovableObstacleSphere(position, 5, ground);
+  Vector3 position = new Vector3(leftX + (rightX - leftX)/2, ground - 40, backZ - (frontZ - backZ)/2);
+  ObstacleSphere obstacle = new NonmovableObstacleSphere(position, 2, ground);
   obstacles.add(obstacle);
   water.addObstacle(obstacle);
 }
@@ -98,7 +98,7 @@ void draw() {
 
   camera.Update(1.0/frameRate);
   for(int i=0; i<10; i++){
-    water.Update(1.0/frameRate);
+    water.Update(1.0/(1.5*frameRate));
     drawWater();
   }
 

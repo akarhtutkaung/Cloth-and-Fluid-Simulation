@@ -14,7 +14,7 @@ class NonmovableObstacleSphere extends ObstacleSphere
 
   void Update(PVector forwardDir, PVector rightDir, float dt) {
     if(position.y + radius < ground){
-      position.y += dt * 0.05f;
+      position.y += dt * 0.03f;
     } else {
       position.y = - radius + ground;
     }

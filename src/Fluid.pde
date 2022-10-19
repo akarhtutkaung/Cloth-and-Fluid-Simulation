@@ -9,8 +9,8 @@ class Fluid
   float x;
   float z;
   final float dx = 0.5f; // length of x-axis cell
-  final float dz = 10.0f; // length of z-axis cell
-  final float dy = 3.0f; // length of y-axis cell
+  final float dz = 50.0f; // length of z-axis cell
+  final float dy = 30.0f; // length of y-axis cell
   float lastXSize;
   float lastZSize;
   int nx; // number of x-axis cells
@@ -21,7 +21,8 @@ class Fluid
   float ground;
   float g = 1.0f; // gravity
   float damp = 0.9f;
-  float scale = 10.0f;
+  float waterHeightObstacle = 30.0f;
+  //float scale = 1.0f;
 
   ArrayList<ObstacleSphere> obstacles = new ArrayList<ObstacleSphere>();
 
@@ -81,13 +82,24 @@ class Fluid
 
     // Check if obstacle collide with fluid
     for(ObstacleSphere obstacle : obstacles){
-      for(int i = 0; i < nx; i++){
-        if(obstacle.hit == false){
-          if(obstacle.radius + obstacle.position.y > ground - ((rectangles[rectangles.length/2].size.y*scale/2))){
-            rectangles[rectangles.length/2 + 1].size.y = 1;
-            rectangles[rectangles.length/2 - 1].size.y = 1;
-            rectangles[rectangles.length/2].size.y = 1;
-            obstacle.hit = true;
+      ArrayList<Integer> inside = new ArrayList<Integer>();
+      if(obstacle.hit == false){
+        for(int i = 0; i < nx; i++){
+          if(Math.abs(obstacle.position.x - rectangles[i].position.x) < obstacle.radius){
+              inside.add(i);
+          }
+        }
+        if(obstacle.radius + obstacle.position.y > ground - ((rectangles[rectangles.length/2].size.y/2))){
+          if(inside.size() > 0){
+            if(inside.get(0) > 2){
+              rectangles[inside.get(0) - 1].size.y += waterHeightObstacle;  
+              rectangles[inside.get(0) - 2].size.y += waterHeightObstacle;  
+            }
+            if(inside.get(inside.size() - 1) < nx - 1){
+              rectangles[inside.get(inside.size() - 1) + 1].size.y += waterHeightObstacle;
+              rectangles[inside.get(inside.size() - 1) + 2].size.y += waterHeightObstacle; 
+            }
+          obstacle.hit = true;
           }
         }
       }
@@ -161,7 +173,7 @@ class Fluid
         RGB rgb = rectangle.rgb;
         fill(rgb.r, rgb.g, rgb.b);
         translate(rectangle.position.x, rectangle.position.y, rectangle.position.z);
-        box(rectangle.size.x * scale, rectangle.size.y * scale, rectangle.size.z * scale);
+        box(rectangle.size.x, rectangle.size.y, rectangle.size.z);
         popMatrix();
       // }
     }
