@@ -19,13 +19,13 @@ The code inside this repo implements 2 simulations; Cloth, and Fluid. The cloth 
 https://user-images.githubusercontent.com/76828992/197096991-bf028a13-1423-42d2-8825-e656f715cdca.mp4
 
 - Cloth Simulation
-  - Multiple ropes (vertically and horizontally) were attached to each others to form a cloth
+  - Multiple ropes (vertically and horizontally) were attached to each others to form a cloth. Each string between nodes are vertically and horizontally connected. The gap between nodes are narrowed down to have densed cloth. As interpolating nodes between nodes, cloth looks natural with the obastacle
 - 3D Simulation
   - The scene is render in 3D environment where user can move around 
 - High-quality Rendering
   - The cloth uses real life texture to make it look good
 - User Interaction
-  - User can move the obstacle as well as the camera around
+  - User can move the obstacle as well as the camera around. The obstacle can be moving around or through the cloth by user inputs.
  
 https://user-images.githubusercontent.com/76828992/197096573-77a2bfca-0a2b-4ed7-aac7-8c95e9cb1db9.mp4
 
