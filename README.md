@@ -9,7 +9,7 @@ CSCI 5611 Project 2
 Language: Processing
 
 ## Summary
-The code inside this repo implements 2 simulations; Cloth, and Fluid. The cloth can be collide with obstacle and change shape as in real life. As for the fluid, if something were to drop inside, it will start the waves.
+The code inside this repo implements 2 simulations; Cloth, and Fluid. The cloth can collide with obstacle and change shape as in real life. As for the fluid, if something were to drop inside, it will start the waves.
 
 ## Cloth Simulation
 
