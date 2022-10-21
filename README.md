@@ -44,11 +44,6 @@ https://user-images.githubusercontent.com/76828992/197099927-e03eb14f-cec7-46c7-
 - Texturizing the cloth is a bit challenging when the U and V values were not mentioned in the documentation of processing on how to calculate it.
 
 ### Outside resources (Credits)
-#### Model
-- Buildings: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Author: Szymon Lukaszuk<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Link: https://assetstore.unity.com/packages/3d/environments/historic/lowpoly-medieval-buildings-58289
-
 #### Texture
 - Cloth: <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Link: https://cdn.shopify.com/s/files/1/2454/1459/products/DREAMDR-02RED_5a0c2fff-d2d3-4a34-906e-9e868bc016eb.jpg?v=1508036643
