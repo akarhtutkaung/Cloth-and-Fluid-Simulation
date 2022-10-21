@@ -1,6 +1,6 @@
 # Cloth and Fluid Simulation
 
-CSCI 5611 Project 1
+CSCI 5611 Project 2
 
 @Author: 
 - Akar (Ace) Kaung 
