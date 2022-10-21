@@ -64,7 +64,6 @@ void drawObstacle() {
     pushMatrix();
     fill(255,0,0);
     translate(obstacle.position.x, obstacle.position.y, obstacle.position.z);
-    // sphere(obstacle.radius);
     box(obstacle.radius, obstacle.radius, 460);
     popMatrix();
   }
