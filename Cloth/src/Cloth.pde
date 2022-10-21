@@ -10,6 +10,9 @@ class Cloth
   float mass = 0.1;
   float k = 800;
   float kv = 130;
+  final float p = 0.5f; // density of air
+  final float airV = 0.2f; // air velocity
+  final float cd = 0.2f; // drag coefficient 
 
   float yOffset;
   float xOffset;
@@ -28,7 +31,7 @@ class Cloth
   int maxRowNodes;
 
   float width = 20.0f;
-  float height = 15.0f;
+  float height = 20.0f;
 
   Node nodes[][];
 
@@ -88,6 +91,17 @@ class Cloth
     }
   }
 
+  Vector3 aerodynamicForce(Node node1, Node node2, Node node3){
+    Vector3 v = (node1.velocity.plus(node2.velocity).plus(node3.velocity)).divide(3.0f - airV);
+    Vector3 r2Mr1 = node2.position.minus(node1.position);
+    Vector3 r3Mr1 = node3.position.minus(node1.position);
+    Vector3 nStar = cross(r2Mr1, r3Mr1);
+    Vector3 v2an = nStar.times((v.length() * (dot(v,nStar))) / (2 * nStar.length()));
+    // Vector3 v2an = dot((nStar.mul(v).mul(Math.abs(v)).divide(2 * nStar.length())), nStar);
+    Vector3 fAero = v2an.times(-0.5 * p * cd);
+    return fAero.divide(3.0f);
+  }
+
   void Update(float dt){
     //Reset accelerations each timestep (momenum only applies to velocity)
     for(int i = 0; i < maxRowNodes; i++){
@@ -129,6 +143,26 @@ class Cloth
         Vector3 forceh = stringDirh.times(stringFh+dampFh);
         nodes[i][j].addToAcceleration(forceh.times(-1.0/mass));
         nodes[i][j+1].addToAcceleration(forceh.times(1.0/mass));
+      }
+    }
+
+    // Aerodynamic force
+    for(int row = 0; row < maxRowNodes; row++){
+      for(int col = 0; col < maxColumnNodes-1; col++){
+        
+        if(row < maxRowNodes - 1){
+          Vector3 fAero = aerodynamicForce(nodes[row][col], nodes[row+1][col], nodes[row][col+1]);
+          nodes[row][col].addToAcceleration(fAero);
+          nodes[row][col+1].addToAcceleration(fAero);
+          nodes[row+1][col].addToAcceleration(fAero);
+        }
+
+        if(row > 0){
+          Vector3 fAero = aerodynamicForce(nodes[row][col+1], nodes[row-1][col+1], nodes[row][col]);
+          nodes[row][col].addToAcceleration(fAero);
+          nodes[row-1][col+1].addToAcceleration(fAero);
+          nodes[row][col+1].addToAcceleration(fAero);
+        }
       }
     }
 
