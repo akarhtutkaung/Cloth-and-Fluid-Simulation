@@ -9,7 +9,7 @@ class Fluid
   float x;
   float z;
   final float dx = 0.5f; // length of x-axis cell
-  final float dz = 50.0f; // length of z-axis cell
+  float dz = 50.0f; // length of z-axis cell
   final float dy = 30.0f; // length of y-axis cell
   float lastXSize;
   float lastZSize;
@@ -39,8 +39,9 @@ class Fluid
     // hu = bottomY - topY;
     x = rightX - leftX;
     nx = (int) (x/dx);
-    z = frontZ - backZ;
+    z = backZ - frontZ;
     nz = (int) (z/dz);
+    dz = -z;
     lastXSize = x - (dx * nx);
     lastZSize = z - (dz * nz);
     // rectangles = new Rectangle[nx][nz]; // uncomment this
@@ -66,7 +67,7 @@ class Fluid
         //   zPos += dz/2.0f;
         // }
         
-        Vector3 position = new Vector3(xPos, ground, zPos);
+        Vector3 position = new Vector3(xPos, ground+(dy/2), zPos);
         // Vector3 size = new Vector3(dx, 2*i/nx + 1, dz);
         Vector3 size = new Vector3(dx, dy, dz);
 
@@ -89,15 +90,13 @@ class Fluid
               inside.add(i);
           }
         }
-        if(obstacle.radius + obstacle.position.y > ground - ((rectangles[rectangles.length/2].size.y/2))){
+        if(obstacle.radius + obstacle.position.y > ground){
           if(inside.size() > 0){
-            if(inside.get(0) > 2){
-              rectangles[inside.get(0) - 1].size.y += waterHeightObstacle;  
-              rectangles[inside.get(0) - 2].size.y += waterHeightObstacle;  
+            if(inside.get(0) > 1){
+              rectangles[inside.get(0) - 1].size.y += waterHeightObstacle;   
             }
-            if(inside.get(inside.size() - 1) < nx - 1){
+            if(inside.get(inside.size() - 1) < nx){
               rectangles[inside.get(inside.size() - 1) + 1].size.y += waterHeightObstacle;
-              rectangles[inside.get(inside.size() - 1) + 2].size.y += waterHeightObstacle; 
             }
           obstacle.hit = true;
           }
@@ -169,6 +168,7 @@ class Fluid
     for(int i = 0; i < nx; i++){
       // for(int j = 0; j < nz; j++){
         pushMatrix();
+        noStroke();
         Rectangle rectangle = rectangles[i];
         RGB rgb = rectangle.rgb;
         fill(rgb.r, rgb.g, rgb.b);

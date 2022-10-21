@@ -1,5 +1,4 @@
 Camera camera;
-Fluid water;
 ArrayList<Cloth> clothes = new ArrayList<Cloth>();
 
 //Create Window
@@ -7,18 +6,11 @@ String windowTitle = "Project2";
 float ground = 60;
 ArrayList<ObstacleSphere> obstacles = new ArrayList<ObstacleSphere>();
 
-// Fluid bounding box
-float leftX = -50;
-float rightX = 50;
-float backZ = -350; 
-float frontZ = -400;
-
 void setup()
 {
   fullScreen(P3D);
   surface.setTitle(windowTitle);
   camera = new Camera();
-  water = new Fluid(leftX, rightX, backZ, frontZ, ground);
   float rad = 25;
   ObstacleSphere obstacle = new MovableObstacleSphere(new Vector3(100, ground - rad, -200), rad);
   obstacles.add(obstacle);
@@ -52,28 +44,12 @@ void mouseMoved()
   camera.HandleMouseMoved();
 }
 
-void mousePressed()
-{
-  createObstacleForFluid();
-}
-
-void createObstacleForFluid(){
-  Vector3 position = new Vector3(leftX + (rightX - leftX)/2, ground - 40, backZ - (frontZ - backZ)/2);
-  ObstacleSphere obstacle = new NonmovableObstacleSphere(position, 2, ground);
-  obstacles.add(obstacle);
-  water.addObstacle(obstacle);
-}
-
 void drawGround() {
   pushMatrix();
   fill(128,128,128);
   translate( 0, ground, 0 );
   box(1000,1,1000);
   popMatrix();
-}
-
-void drawWater() {
-  water.Draw();
 }
 
 void drawCloth() {
@@ -97,10 +73,6 @@ void draw() {
   lights();
 
   camera.Update(1.0/frameRate);
-  for(int i=0; i<10; i++){
-    water.Update(1.0/(1.5*frameRate));
-    drawWater();
-  }
 
   for(Cloth cloth : clothes){
     for (int i=0; i < 100; i++){
